@@ -116,3 +116,55 @@ label.row {
     margin-left: 0;
   }
 }
+
+/* Keep Tabler 1.5's behaviour on Tabler 1.6/1.7. App.css loads before the
+   dynamically imported Tabler CSS, hence the doubled :root selectors. */
+
+/* 1.6 dropped the reserved scrollbar gutter, so the layout shifted 7px between short and long pages */
+html {
+	scrollbar-gutter: stable;
+}
+@supports not (scrollbar-gutter: stable) {
+	html {
+		overflow-y: scroll;
+	}
+}
+
+/* 1.6+ mixes the focus ring 50% with the background (75% dark, about 2.1:1 on white); restore full strength */
+:root:root {
+	--tblr-focus-ring-opacity: 1;
+	--tblr-focus-ring-opacity-dark: 1;
+}
+
+/* Coloured primary buttons (btn-primary + bg-<colour>) got a blue primary border in 1.7 */
+.btn-primary[class*=" bg-"] {
+	--tblr-btn-border-color: transparent;
+	--tblr-btn-hover-border-color: transparent;
+	--tblr-btn-active-border-color: transparent;
+	--tblr-btn-box-shadow: var(--tblr-shadow-input);
+}
+
+.auth-type-badge {
+    position: absolute;
+    left: -0.5rem;
+    top: 0;
+    padding: 0 0.4rem 0.15rem 0.4rem;
+    margin: 0 0 0 0.5rem;
+    border: 1px solid white;
+    border-radius: var(--tblr-border-radius);
+    border-color: var(--tblr-border-color);
+    background-color: var(--tblr-bg-surface-secondary);
+    opacity: 0.85;
+    font-size: 0.7rem;
+}
+
+#sso-nav li a span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.33rem;
+}
+
+button.sso-login:disabled {
+    background-color: transparent;
+    color: var(--tblr-azure);
+}
