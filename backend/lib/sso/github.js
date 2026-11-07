@@ -9,7 +9,12 @@ import { concludeAuthorized, parseStateFromCookie } from "./lib.js";
  * @param {Setting} row
  * */
 const getGitHubInitParams = async (_req, row) => {
-	const config = row.configuration_github;
+  // The SSO Client might have been disabled or deleted, or invalid client_id in URL
+	if (!row) {
+		throw new errs.AuthError("sso.error.default");
+  }
+
+  const config = row.configuration_github;
 	const client_id = config.github_client_id;
 	const redirect_uri = config.redirect_url;
 	const scope = "user:email+read:org+offline_access";
@@ -53,7 +58,7 @@ const validateGitHubCallback = async (req, config) => {
 
 	// verify state from authorization request
 	if (state !== currentUrl.searchParams.get("state")) {
-		throw new errs.AuthError("sso.error.sso.error.default");
+		throw new errs.AuthError("sso.error.default");
 	}
 
   let token;

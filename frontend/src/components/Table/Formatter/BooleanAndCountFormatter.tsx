@@ -1,5 +1,5 @@
-import { IconLock, IconShieldCheckFilled } from "@tabler/icons-react";
 import cn from "classnames";
+import type { ReactElement } from "react";
 import { T } from "src/locale";
 
 interface Props {
@@ -7,20 +7,29 @@ interface Props {
 	count: number;
 	disabled: boolean;
 	translationKey: string;
+	translationData?: Record<string, string | number | undefined>;
+	enabledIcon: ReactElement<SVGSVGElement>;
+	disabledIcon: ReactElement<SVGSVGElement>;
 }
-export function BooleanAndCountFormatter({ value, count, disabled, translationKey }: Props) {
-	const enabledColor = disabled ? "opacity-30" : "text-lime opacity-85";
-	const disabledColor = disabled ? "opacity-30" : "opacity-65";
+export function BooleanAsIconWithCountFormatter({
+	value,
+	count,
+	disabled,
+	translationKey,
+	translationData,
+	enabledIcon,
+	disabledIcon,
+}: Props) {
 	return (
 		<span>
-			{value ? <IconShieldCheckFilled className={enabledColor} /> : <IconLock className={disabledColor} />}
+			{value ? enabledIcon : disabledIcon}
 			{count > 0 && (
 				<span
 					className={cn("p-2", {
 						"text-gray-500": disabled,
 					})}
 				>
-					<T id={translationKey} data={{ users: count }} />
+					<T id={translationKey} data={translationData} />
 				</span>
 			)}
 		</span>
