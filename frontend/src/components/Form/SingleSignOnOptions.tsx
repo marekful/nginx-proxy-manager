@@ -81,7 +81,7 @@ export function SingleSignOnOptions({
 								</>
 							)}
 							{index > 0 && (
-								<div className="text-center text-azure">
+								<div className="text-center">
 									<hr className="mt-3 mb-2 border border-azure w-50 d-inline-block" />
 								</div>
 							)}

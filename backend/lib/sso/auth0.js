@@ -38,9 +38,9 @@ const getAuth0Client = async (row, params) => {
  * @return { {String}, {String}, {String} } state, code_verifier and url
  * */
 const getAuth0InitParams = async (_req, row) => {
-	// The SSO Client might have been disabled or deleted or invalid client_id in URL
+	// The SSO Client might have been disabled or deleted, or invalid client_id in URL
 	if (!row) {
-		throw new errs.AuthError("Unexpected error, please try again later.");
+		throw new errs.AuthError("sso.error.default");
 	}
 
 	const client = await getAuth0Client(row, {

@@ -2,6 +2,7 @@ import { IconBrandAuth0, IconBrandGithub, IconBrandOauth } from "@tabler/icons-r
 import { SingleSignOnClientType } from "src/api/backend";
 import { T } from "src/locale";
 import { Button } from "../Button";
+import type { ReactElement } from "react";
 
 interface SingleSignOnConfig {
 	id: number;
@@ -23,9 +24,15 @@ interface Props {
 	setOAuthInit?: (index: number) => void;
 }
 
+const icons: { [type: string]: ReactElement } = {
+	[SingleSignOnClientType.Auth0]: <IconBrandAuth0 height={20} className="mx-2" />,
+	[SingleSignOnClientType.GitHub]: <IconBrandGithub height={20} className="mx-2" />,
+	[SingleSignOnClientType.OpenID]: <IconBrandOauth height={20} className="mx-2" />,
+};
+
 export function SingleSignOnButton({ config, isSubmitting, isOAuthInit, setFormErr, setOAuthInit }: Props) {
 	const initializeOAuthFlow = async (clientId: number, clientType?: SingleSignOnClientType) => {
-		if (!setFormErr || !setOAuthInit) return;
+		if (!setFormErr || !setOAuthInit) return; // when used as button preview
 		setFormErr("");
 		setOAuthInit(clientId);
 		const returnTo = location.pathname;
@@ -48,9 +55,7 @@ export function SingleSignOnButton({ config, isSubmitting, isOAuthInit, setFormE
 			isLoading={isOAuthInit === 0 ? undefined : isOAuthInit === config.id}
 			onClick={() => initializeOAuthFlow(config.id, config.type)}
 		>
-			{config.type === SingleSignOnClientType.GitHub && <IconBrandGithub height={20} className="mx-2" />}
-			{config.type === SingleSignOnClientType.Auth0 && <IconBrandAuth0 height={20} className="mx-2" />}
-			{config.type === SingleSignOnClientType.OpenID && <IconBrandOauth height={20} className="mx-2" />}
+			{icons[config.type]}
 			{config.label && <span>{config.label}</span>}
 			{!config.label && <T id="sign-in-with" data={{ name: config.name }} />}
 		</Button>

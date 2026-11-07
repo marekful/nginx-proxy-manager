@@ -1,10 +1,19 @@
-import { IconAlertTriangle, IconDotsVertical, IconEdit, IconPower, IconTrash } from "@tabler/icons-react";
+import {
+	IconAlertTriangle,
+	IconDotsVertical,
+	IconEdit,
+	IconForbid2,
+	IconPower,
+	IconTrash,
+	IconUserCheck,
+	IconUserPlus,
+} from "@tabler/icons-react";
 import { createColumnHelper, useTable } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { type SingleSignOnClient, SingleSignOnClientType } from "src/api/backend";
 import { EmptyData, TrueFalseFormatter } from "src/components";
 import { type Features, features } from "src/components/Table/features";
-import { BooleanAndCountFormatter } from "src/components/Table/Formatter/BooleanAndCountFormatter";
+import { BooleanAsIconWithCountFormatter } from "src/components/Table/Formatter/BooleanAndCountFormatter";
 import { SingleSignOnProtocolFormatter } from "src/components/Table/Formatter/SingleSignOnProtocolFormatter";
 import { ValueAndDateFormatter } from "src/components/Table/Formatter/ValueAndDateFormatter";
 import { TableLayout } from "src/components/Table/TableLayout";
@@ -57,14 +66,25 @@ export default function Table({ data, onEdit, isFiltered, isFetching, onDisableT
 			columnHelper.accessor((row: any) => row, {
 				id: "allowInternal",
 				header: intl.formatMessage({ id: "sso.column.internal" }),
+				sortFn: (a: any, b: any) => (a.original.internalUsers > b.original.internalUsers ? 1 : -1),
 				cell: (info: any) => {
 					const value = info.getValue();
 					return (
-						<BooleanAndCountFormatter
+						<BooleanAsIconWithCountFormatter
 							value={value.allowInternal}
 							count={value.internalUsers}
 							disabled={!value.enabled}
 							translationKey="sso.info.internal-users-count"
+							translationData={{ users: value.internalUsers }}
+							enabledIcon={
+								<IconUserCheck
+									height={20}
+									className={value.enabled ? "text-lime opacity-85" : "opacity-30"}
+								/>
+							}
+							disabledIcon={
+								<IconForbid2 height={20} className={value.enabled ? "opacity-65" : "opacity-30"} />
+							}
 						/>
 					);
 				},
@@ -72,14 +92,25 @@ export default function Table({ data, onEdit, isFiltered, isFetching, onDisableT
 			columnHelper.accessor((row: any) => row, {
 				id: "provisionUsers",
 				header: intl.formatMessage({ id: "sso.column.provision" }),
+				sortFn: (a: any, b: any) => (a.original.provisionedUsers > b.original.provisionedUsers ? 1 : -1),
 				cell: (info: any) => {
 					const value = info.getValue();
 					return (
-						<BooleanAndCountFormatter
+						<BooleanAsIconWithCountFormatter
 							value={value.provisionUsers}
 							count={value.provisionedUsers}
 							disabled={!value.enabled}
 							translationKey="sso.info.provisioned-users-count"
+							translationData={{ users: value.provisionedUsers }}
+							enabledIcon={
+								<IconUserPlus
+									height={20}
+									className={value.enabled ? "text-lime opacity-85" : "opacity-30"}
+								/>
+							}
+							disabledIcon={
+								<IconForbid2 height={20} className={value.enabled ? "opacity-65" : "opacity-30"} />
+							}
 						/>
 					);
 				},
@@ -178,7 +209,7 @@ export default function Table({ data, onEdit, isFiltered, isFetching, onDisableT
 		meta: {
 			isFetching,
 		},
-		enableSortingRemoval: false,
+		enableSortingRemoval: true,
 	});
 
 	const customAddBtn = (

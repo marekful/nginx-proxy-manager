@@ -116,7 +116,10 @@
 <details style="margin: 0.5rem 0;">
     <summary><h4 style="display: inline-block;">Settings</h4></summary>
     <p>
-        When `Require verified email` is turnbed on, 
+        When <code>Require verified email</code> is turned on then the <code>email_verified=true</code> flag
+        is required in the claims to proceed with provisioning or login to internal account. 
+        For provisioned users, this is not checked for subsequent logins once
+        successfully provisioned, while it's checked before every login for internal user account access.
     </p>
 </details>
 
@@ -172,7 +175,7 @@
     <summary><h4 style="display: inline-block;">Data protection</h4></summary>
     <p>
     Sensitive information stored in the database such as the Client Secret 
-    are only sent over the network once when the client is created (or when updated with a new value),
+    are only sent over the network once when the client is created (or when the secret is updated with a new value),
     and encrypted with an industry standard encryption algorithm (RSA-SHA256) using the application
     secret key.
     </p>
